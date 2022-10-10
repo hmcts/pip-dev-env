@@ -1,0 +1,109 @@
+version: '3.9'
+services:
+  proxy:
+    container_name: proxy
+    image: ghcr.io/joshblackmoor/pip-proxy:1.0.0
+    ports:
+      - 8080:443
+    restart: unless-stopped
+    depends_on:
+      - frontend
+  frontend:
+    container_name: frontend
+    image: pip-frontend
+    env_file:
+      - pip-frontend.env
+    restart: unless-stopped
+    depends_on:
+      - redis
+      - account-management
+      - data-management
+      - subscription-management
+      - channel-management
+  data-management:
+    container_name: data-management
+    image: pip-data-management
+    env_file:
+      - pip-data-management.env
+    ports:
+      - 8090:8090
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - azurite
+      - account-management
+  subscription-management:
+    container_name: subscription-management
+    image: pip-subscription-management
+    env_file:
+      - pip-subscription-management.env
+    ports:
+      - 4550:4550
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - publication-services
+      - data-management
+  account-management:
+    container_name: account-management
+    image: pip-account-management
+    env_file:
+      - pip-account-management.env
+    ports:
+      - 6969:6969
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - azurite
+  channel-management:
+    container_name: channel-management
+    image: pip-channel-management
+    env_file:
+      - pip-channel-management.env
+    ports:
+      - 8181:8181
+    restart: unless-stopped
+    depends_on:
+      - account-management
+      - subscription-management
+  publication-services:
+    container_name: publication-services
+    image: pip-publication-services
+    env_file:
+      - pip-publication-services.env
+    ports:
+      - 8081:8081
+    restart: unless-stopped
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: unless-stopped
+    volumes: 
+      - redis:/data
+  azurite:
+    container_name: azurite
+    image: mcr.microsoft.com/azure-storage/azurite:latest
+    volumes:
+      - azurite:/data
+    ports:
+      - 10000:10000
+    restart: unless-stopped
+  postgres:
+    container_name: postgres
+    image: postgres:11
+    environment:
+      POSTGRES_DB: pip_db
+      POSTGRES_USER: pip_user
+      POSTGRES_PASSWORD: pip_password
+    volumes: 
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: unless-stopped
+volumes:
+  postgres:
+    driver: local
+  azurite:
+    driver: local
+  redis:
+    driver: local
