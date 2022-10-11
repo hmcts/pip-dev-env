@@ -4,10 +4,11 @@ Local development environment setup for the Court and Tribunal Hearings service 
 # Prerequisites
 
 ```
-- Docker
+- Docker - latest version (seemingly not compatible with older versions)
 - Docker Compose
 - Azure CLI
 ```
+
 
 # Setup
 
