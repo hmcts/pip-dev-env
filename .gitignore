@@ -1,6 +1,1 @@
-pip-account-management.env
-pip-data-management.env
-pip-subscription-management.env
-pip-channel-management.env
-pip-frontend.env
-pip-publication-services.env
+*.env
