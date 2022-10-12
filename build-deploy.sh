@@ -9,7 +9,7 @@ ALL_SERVICES=(pip-subscription-management pip-data-management pip-publication-se
 elif [[ $# -eq 2 ]];
 then
 echo "Parametrised mode engaged - only $2 will be refreshed."
-ALL_SERVICES=($3)
+ALL_SERVICES=($2)
 else
 echo "Sorry - you've provided too many arguments (max 2)"
 exit
