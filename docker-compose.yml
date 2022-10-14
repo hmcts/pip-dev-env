@@ -2,7 +2,7 @@ version: '3.9'
 services:
   proxy:
     container_name: proxy
-    image: ghcr.io/joshblackmoor/pip-proxy:1.0.0
+    image: ghcr.io/joshblackmoor/pip-proxy:1.1.1
     ports:
       - 8080:443
     restart: unless-stopped
