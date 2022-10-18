@@ -17,7 +17,7 @@ env:
 	echo CLIENT_SECRET=$(shell az keyvault secret show --name "app-pip-publication-services-pwd" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
 	echo APP_URI=$(shell az keyvault secret show --name "app-pip-publication-services-scope" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
 	echo DATA_MANAGEMENT_AZ_API=$(shell az keyvault secret show --name "app-pip-data-management-scope" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
-	echo DATA_MANAGEMENT_URL=http://account-management:8090/ >> pip-publication-services.env
+	echo DATA_MANAGEMENT_URL=http://data-management:8090/ >> pip-publication-services.env
 	echo NOTIFY_API_KEY=$(shell az keyvault secret show --name "gov-uk-notify-api-key" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
 	echo PI_TEAM_EMAIL=${EMAIL} >> pip-publication-services.env
 	echo THIRD_PARTY_CERTIFICATE=$(shell az keyvault secret show --name "courtel-certificate" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
