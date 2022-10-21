@@ -18,6 +18,10 @@ fi
 docker compose down
 
 for SERVICE in ${ALL_SERVICES[@]}; do
+    if [ $SERVICE != "pip-frontend" ]
+    then
+        (cd $BASE_DIR/$SERVICE  && ./gradlew assemble)
+    fi
     docker build $BASE_DIR/$SERVICE --build-arg APP=$SERVICE.jar -t $SERVICE
 done
 
