@@ -9,7 +9,7 @@ echo "Standard mode engaged - all services will be refreshed."
 ALL_SERVICES=(pip-subscription-management pip-data-management pip-publication-services pip-account-management pip-channel-management pip-frontend)
 elif [[ $# -eq 2 ]];
 then
-    if [[ $2 == '--no-build' ]] then
+    if [[ $2 == '--no-build' ]]; then
     ALL_SERVICES=(pip-subscription-management pip-data-management pip-publication-services pip-account-management pip-channel-management pip-frontend)
     echo "Gradle build disabled"
     BUILD=false
@@ -17,7 +17,7 @@ then
     echo "Parametrised mode engaged - only $2 will be refreshed."
     ALL_SERVICES=($2)
     fi
-elif [[ $3 == '--no-build' ]] then
+elif [[ $3 == '--no-build' ]]; then
     echo "Gradle build disabled"
     BUILD=false
 else
