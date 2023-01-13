@@ -26,6 +26,10 @@ env:
 	echo THIRD_PARTY_CERTIFICATE=$(shell az keyvault secret show --name "courtel-certificate" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
 	echo CHANNEL_MANAGEMENT_AZ_API=$(shell az keyvault secret show --name "app-pip-channel-management-scope" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
 	echo CHANNEL_MANAGEMENT_URL=http://channel-management:8181/ >> pip-publication-services.env
+	echo ACCOUNT_MANAGEMENT_AZ_API=$(shell az keyvault secret show --name "app-pip-account-management-scope" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
+	echo ACCOUNT_MANAGEMENT_URL=http://account-management:6969/ >> pip-publication-services.env
+	echo SUBSCRIPTION_MANAGEMENT_URL=http://subscription-management:4550/ >> pip-publication-services.env
+	echo SUBSCRIPTION_MANAGEMENT_AZ_API=$(shell az keyvault secret show --name "app-pip-subscription-management-scope" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-publication-services.env
 
 	echo TENANT_ID=$(shell az keyvault secret show --name "app-tenant-id" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-data-management.env
 	echo CLIENT_ID=$(shell az keyvault secret show --name "app-pip-data-management-id" --vault-name pip-ss-kv-stg --query "value" -o tsv) >> pip-data-management.env
