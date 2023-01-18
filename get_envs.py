@@ -41,46 +41,23 @@ conn_str = 'DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKe
            '=http://azurite:10000/devstoreaccount1;'
 
 channel_management_keyvault = {
-    'app-pip-account-management-scope': 'ACCOUNT_MANAGEMENT_AZ_API',
     'auto-pip-stg-courtel-api': 'COURTEL_API',
-    'app-pip-data-management-scope': 'DATA_MANAGEMENT_AZ_API',
 }
 
 publication_services_keyvault = {
     'gov-uk-notify-api-key': 'NOTIFY_API_KEY',
-    'app-pip-data-management-scope': 'DATA_MANAGEMENT_AZ_API',
     'courtel-certificate': 'THIRD_PARTY_CERTIFICATE',
-    'app-pip-account-management-scope': 'ACCOUNT_MANAGEMENT_AZ_API',
-    'app-pip-subscription-management-scope': 'SUBSCRIPTION_MANAGEMENT_AZ_API',
-    'app-pip-channel-management-scope': 'CHANNEL_MANAGEMENT_AZ_API',
 }
 
-data_management_keyvault = {
-    'app-pip-channel-management-scope': 'CHANNEL_MANAGEMENT_AZ_API',
-    'app-pip-account-management-scope': 'ACCOUNT_MANAGEMENT_AZ_API',
-    'app-pip-subscription-management-scope': 'SUBSCRIPTION_MANAGEMENT_AZ_API',
-    'app-pip-publication-services-scope': 'PUBLICATION_SERVICES_AZ_API'
-}
-subscription_management_keyvault = {
-    'app-pip-channel-management-scope': 'CHANNEL_MANAGEMENT_AZ_API',
-    'app-pip-account-management-scope': 'ACCOUNT_MANAGEMENT_AZ_API',
-    'app-pip-publication-services-scope': 'PUBLICATION_SERVICES_AZ_API',
-    'app-pip-data-management-scope': 'DATA_MANAGEMENT_AZ_API'
-}
+data_management_keyvault = {}
+subscription_management_keyvault = {}
 account_management_keyvault = {
-    'app-pip-channel-management-scope': 'CHANNEL_MANAGEMENT_AZ_API',
-    'app-pip-publication-services-scope': 'PUBLICATION_SERVICES_AZ_API',
-    'app-pip-subscription-management-scope': 'SUBSCRIPTION_MANAGEMENT_AZ_API',
-    'app-pip-account-management-scope': 'ACCOUNT_MANAGEMENT_AZ_API',
     'b2c-tenant-id': 'TENANT_GUID_B2C',
     'b2c-extension-app-id': 'EXTENSION_ID',
     'auto-pip-stg-pip-account-management-stg-id': 'CLIENT_ID_B2C',
     'auto-pip-stg-pip-account-management-stg-pwd': 'CLIENT_SECRET_B2C'
 }
 frontend_keyvault = {
-    'app-pip-data-management-scope': 'DATA_MANAGEMENT_AZ_API',
-    'app-pip-account-management-scope': 'ACCOUNT_MANAGEMENT_AZ_API',
-    'app-pip-subscription-management-scope': 'SUBSCRIPTION_MANAGEMENT_AZ_API',
     'app-pip-frontend-id': 'CLIENT_ID_INTERNAL',
     'app-pip-frontend-pwd': 'CLIENT_SECRET_INTERNAL',
     'b2c-tenant-id': 'TENANT_GUID',
@@ -125,12 +102,19 @@ frontend_hardcoded = [
     f'TENANT_ID={tenant_id}'
 ]
 
-repos = {'pip-channel-management': (channel_management_keyvault, channel_management_hardcoded),
-         'pip-publication-services': (publication_services_keyvault, publication_services_hardcoded),
-         'pip-data-management': (data_management_keyvault, data_management_hardcoded),
-         'pip-subscription-management': (subscription_management_keyvault, subscription_management_hardcoded),
-         'pip-account-management': (account_management_keyvault, account_management_hardcoded),
-         'pip-frontend': (frontend_keyvault, frontend_hardcoded)}
+repos = {'pip-channel-management': (channel_management_keyvault, channel_management_hardcoded,
+                                    ('account-management', 'data-management')),
+         'pip-publication-services': (publication_services_keyvault, publication_services_hardcoded,
+                                      ('account-management', 'subscription-management', 'channel-management',
+                                       'data-management')),
+         'pip-data-management': (data_management_keyvault, data_management_hardcoded, (
+             'channel-management', 'subscription-management', 'publication-services', 'account-management')),
+         'pip-subscription-management': (subscription_management_keyvault, subscription_management_hardcoded, (
+             'channel-management', 'data-management', 'publication-services', 'account-management')),
+         'pip-account-management': (account_management_keyvault, account_management_hardcoded,
+                                    ('channel-management', 'publication-services', 'subscription-management')),
+         'pip-frontend': (frontend_keyvault, frontend_hardcoded,
+                          ('data-management', 'account-management', 'subscription-management'))}
 
 
 def get_tenant_id_client_id_and_secret(f, filename):
@@ -148,6 +132,10 @@ def get_app_uri(f, filename):
     f.write(f'APP_URI={app_uri}\n')
 
 
+az_api_keys = {service.upper().replace('-', '_'): keyvault_client.get_secret(f'app-pip-{service}-scope').value for
+               service in ['account-management', 'data-management', 'subscription-management', 'channel-management',
+                           'publication-services']}
+
 for filename, repo in repos.items():
     with open(filename + '.env', 'w+') as f:
         if filename != 'pip-frontend':
@@ -162,4 +150,7 @@ for filename, repo in repos.items():
             f.write(f'{value}={secret}\n')
         for hardcoded_secret in repo[1]:
             f.write(hardcoded_secret + '\n')
+        for api_key in repo[2]:
+            key = api_key.upper().replace('-', '_')
+            f.write(f'{key}_AZ_API={az_api_keys[key]}\n')
 
