@@ -1,5 +1,10 @@
-from azure.identity import AzureCliCredential
-from azure.keyvault.secrets import SecretClient
+try:
+    from azure.identity import AzureCliCredential
+    from azure.keyvault.secrets import SecretClient
+except ModuleNotFoundError:
+    print("Error: Sorry, you've not got a valid installation of the azure-identity or azure-keyvault-secrets package."
+          " Please address this and try again.")
+    exit()
 from azure.core.exceptions import ClientAuthenticationError
 import logging
 import sys
@@ -26,7 +31,7 @@ try:
     # try block checks for azure cli login status. If an error is returned from azure, client errors quickly.
     tenant_id = keyvault_client.get_secret("app-tenant-id").value
 except ClientAuthenticationError:
-    print("You've not currently got an azure login - please sign in using the 'az login' command then try again.")
+    print("Error: You're not currently logged in to azure. Please sign in using the 'az login' command then try again.")
     exit()
 
 email = input("Enter your email for publication services: ")
