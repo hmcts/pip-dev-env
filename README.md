@@ -10,7 +10,7 @@ Local development environment setup for the Court and Tribunal Hearings service 
 - Python (any installation over v3.7+ should be okay)
 ```
 
-You'll also need to install the following python pockages:
+You'll also need to install the following python packages:
 - azure-identity
 - azure-keyvault-secrets
 
