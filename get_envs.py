@@ -81,7 +81,7 @@ account_management_hardcoded = [urls['pub-servs'], urls['subs-man'],
                                 'IDENTITY_ISSUER=hmctspipnonprod.onmicrosoft.com',
                                 'RUN_DB_MIGRATION_ON_STARTUP=true']
 frontend_hardcoded = [
-    urls['acc-man'][:-1], urls['data-man'][:-1], urls['subs-man'][:-1],
+        urls['acc-man'][:-1], urls['data-man'][:-1], urls['subs-man'][:-1], urls['chan-man'][:-1]
     'AUTH_RETURN_URL=https://localhost:8080/login/return',
     'ADMIN_AUTH_RETURN_URL=https://localhost:8080/login/admin/return',
     'MEDIA_VERIFICATION_RETURN_URL=https://localhost:8080/media-verification/return',
@@ -114,7 +114,7 @@ repos = {'pip-channel-management': (channel_management_keyvault, channel_managem
          'pip-account-management': (account_management_keyvault, account_management_hardcoded,
                                     ('channel-management', 'publication-services', 'subscription-management')),
          'pip-frontend': (frontend_keyvault, frontend_hardcoded,
-                          ('data-management', 'account-management', 'subscription-management'))}
+                          ('data-management', 'account-management', 'subscription-management', 'channel-management'))}
 
 
 def get_tenant_id_client_id_and_secret(f, filename):
