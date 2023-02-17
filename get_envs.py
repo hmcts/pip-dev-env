@@ -77,11 +77,11 @@ publication_services_hardcoded = [urls['acc-man'], urls['data-man'], urls['chan-
                                   f'PI_TEAM_EMAIL={email}']
 data_management_hardcoded = [urls['acc-man'], urls['chan-man'], urls['pub-servs'], urls['subs-man']]
 subscription_management_hardcoded = [urls['data-man'], urls['chan-man'], urls['pub-servs'], urls['acc-man']]
-account_management_hardcoded = [urls['pub-servs'], urls['subs-man'],
+account_management_hardcoded = [urls['pub-servs'], urls['subs-man'], urls['pub-servs'],
                                 'IDENTITY_ISSUER=hmctspipnonprod.onmicrosoft.com',
                                 'RUN_DB_MIGRATION_ON_STARTUP=true']
 frontend_hardcoded = [
-        urls['acc-man'][:-1], urls['data-man'][:-1], urls['subs-man'][:-1], urls['chan-man'][:-1]
+        urls['acc-man'][:-1], urls['data-man'][:-1], urls['subs-man'][:-1], urls['chan-man'][:-1],
     'AUTH_RETURN_URL=https://localhost:8080/login/return',
     'ADMIN_AUTH_RETURN_URL=https://localhost:8080/login/admin/return',
     'MEDIA_VERIFICATION_RETURN_URL=https://localhost:8080/media-verification/return',
